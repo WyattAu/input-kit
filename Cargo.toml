@@ -1,0 +1,47 @@
+[package]
+name = "input-kit"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/WyattAu/input-kit"
+homepage = "https://github.com/WyattAu/input-kit"
+documentation = "https://docs.rs/input-kit"
+description = "Toolkit-neutral text-composition semantics for Rust: IME preedit state machine, grapheme-cluster caret mapping, and dead-key composition. Pure logic, no windowing or widget dependency"
+readme = "README.md"
+keywords = ["input", "ime", "unicode", "accessibility"]
+categories = ["gui", "internationalization"]
+exclude = [".github/", "supply-chain/"]
+
+# Layer model: docs/layers.md in WyattAu/engineering-standards.
+# L1 — substrate: estate dep none. Pure logic over `alloc`, no windowing, no
+# widget toolkit, no terminal. Declared L1 because every UI stack needs it and
+# none of them should re-derive it (ADR-0004 §2.3).
+[package.metadata.layers]
+tier = "L1"
+
+[dependencies]
+thiserror = "2"
+unicode-segmentation = "1.13"
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "deny"
+
+# Input text reaches this crate from the windowing system: it is arbitrary,
+# user-controlled, and frequently not valid UTF-8-clean text in the sense the
+# caller assumed. Every parser is total and returns a typed error; there is no
+# path that panics or indexes out of bounds. Test targets lift `unwrap_used`
+# and friends at file level with justification.
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+indexing_slicing = "deny"
+undocumented_unsafe_blocks = "deny"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+strip = true
