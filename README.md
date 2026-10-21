@@ -38,13 +38,13 @@ grapheme cluster, which is the only unit a renderer can safely slice at.
 
 ## What is in the box
 
-- **`Composer`** — the preedit state machine. Feed it any platform's event
+- **`Composer`**: the preedit state machine. Feed it any platform's event
   dialect, get back an unambiguous *render this* or *insert that*.
-- **`Preedit`** — in-progress text with the caret normalised from any
+- **`Preedit`**: in-progress text with the caret normalised from any
   platform's unit onto a grapheme-cluster index.
-- **`grapheme`** — caret-to-byte mapping that refuses to split a cluster, plus
+- **`grapheme`**: caret-to-byte mapping that refuses to split a cluster, plus
   cluster-aware `splice` and `delete`.
-- **`DeadKey`** — the accented-Latin composition table, shared instead of
+- **`DeadKey`**: the accented-Latin composition table, shared instead of
   reimplemented per platform.
 
 ## Example
