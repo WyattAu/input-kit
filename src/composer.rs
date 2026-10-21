@@ -144,7 +144,10 @@ impl Composer {
     /// Feed a run of events, returning every non-idle output in order.
     ///
     /// The convenience form for a platform that delivers a batch.
-    pub fn feed<I: IntoIterator<Item = InputEvent>>(&mut self, events: I) -> alloc::vec::Vec<Output> {
+    pub fn feed<I: IntoIterator<Item = InputEvent>>(
+        &mut self,
+        events: I,
+    ) -> alloc::vec::Vec<Output> {
         events
             .into_iter()
             .map(|e| self.handle(e))
@@ -211,7 +214,10 @@ mod tests {
     fn an_empty_preedit_does_not_end_composition() {
         let mut c = Composer::new();
         c.handle(InputEvent::Preedit(Preedit::at_end("か")));
-        assert_eq!(c.handle(InputEvent::Preedit(Preedit::empty())), Output::Idle);
+        assert_eq!(
+            c.handle(InputEvent::Preedit(Preedit::empty())),
+            Output::Idle
+        );
         assert!(c.is_composing(), "composition survived the empty preedit");
     }
 
@@ -220,7 +226,10 @@ mod tests {
     fn direct_insert_aborts_an_active_preedit() {
         let mut c = Composer::new();
         c.handle(InputEvent::Preedit(Preedit::at_end("か")));
-        assert_eq!(c.handle(InputEvent::Insert("x".into())), Output::Commit("x".into()));
+        assert_eq!(
+            c.handle(InputEvent::Insert("x".into())),
+            Output::Commit("x".into())
+        );
         assert!(!c.is_composing(), "preedit cleared by direct insert");
     }
 
@@ -327,9 +336,7 @@ mod tests {
                 // creates nor clears pending text.
                 InputEvent::Preedit(_) => acc,
                 // A commit, a direct insert, or a reset all end composition.
-                InputEvent::Insert(_)
-                | InputEvent::Commit(_)
-                | InputEvent::Reset => None,
+                InputEvent::Insert(_) | InputEvent::Commit(_) | InputEvent::Reset => None,
             });
             let got_pending = c.preedit().map(|p| p.text().to_owned());
             assert_eq!(got_pending, want_pending, "pending state for {seq:?}");
@@ -355,7 +362,13 @@ mod tests {
         // platform asked for a redraw); it is not idempotent-Idle.
         let mut c = Composer::new();
         let p = Preedit::at_end("か");
-        assert!(matches!(c.handle(InputEvent::Preedit(p.clone())), Output::Preedit(_)));
-        assert!(matches!(c.handle(InputEvent::Preedit(p)), Output::Preedit(_)));
+        assert!(matches!(
+            c.handle(InputEvent::Preedit(p.clone())),
+            Output::Preedit(_)
+        ));
+        assert!(matches!(
+            c.handle(InputEvent::Preedit(p)),
+            Output::Preedit(_)
+        ));
     }
 }

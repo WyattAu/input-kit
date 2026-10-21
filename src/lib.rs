@@ -91,9 +91,7 @@ mod integration {
 
         // The dead key itself shows as a one-character preedit.
         let mark = DeadKey::Acute.mark();
-        c.handle(InputEvent::Preedit(Preedit::at_end(
-            String::from(mark),
-        )));
+        c.handle(InputEvent::Preedit(Preedit::at_end(String::from(mark))));
         assert!(c.is_composing());
 
         // The base letter commits the pair.

@@ -73,39 +73,69 @@ impl DeadKey {
         // Latin-1/Latin Extended-A table, which is where every layout's
         // table agrees.
         const ACUTE: &[(char, char)] = &[
-            ('a', '\u{00E1}'), ('e', '\u{00E9}'), ('i', '\u{00ED}'), ('o', '\u{00F3}'),
-            ('u', '\u{00FA}'), ('y', '\u{00FD}'), ('c', '\u{0107}'), ('n', '\u{0144}'),
-            ('s', '\u{015B}'), ('z', '\u{017A}'), ('l', '\u{013E}'), ('r', '\u{0154}'),
+            ('a', '\u{00E1}'),
+            ('e', '\u{00E9}'),
+            ('i', '\u{00ED}'),
+            ('o', '\u{00F3}'),
+            ('u', '\u{00FA}'),
+            ('y', '\u{00FD}'),
+            ('c', '\u{0107}'),
+            ('n', '\u{0144}'),
+            ('s', '\u{015B}'),
+            ('z', '\u{017A}'),
+            ('l', '\u{013E}'),
+            ('r', '\u{0154}'),
             ('g', '\u{01F5}'),
         ];
         const GRAVE: &[(char, char)] = &[
-            ('a', '\u{00E0}'), ('e', '\u{00E8}'), ('i', '\u{00EC}'), ('o', '\u{00F2}'),
+            ('a', '\u{00E0}'),
+            ('e', '\u{00E8}'),
+            ('i', '\u{00EC}'),
+            ('o', '\u{00F2}'),
             ('u', '\u{00F9}'),
         ];
         const CIRCUMFLEX: &[(char, char)] = &[
-            ('a', '\u{00E2}'), ('e', '\u{00EA}'), ('i', '\u{00EE}'), ('o', '\u{00F4}'),
+            ('a', '\u{00E2}'),
+            ('e', '\u{00EA}'),
+            ('i', '\u{00EE}'),
+            ('o', '\u{00F4}'),
             ('u', '\u{00FB}'),
         ];
         const TILDE: &[(char, char)] = &[
-            ('a', '\u{00E3}'), ('n', '\u{00F1}'), ('o', '\u{00F5}'),
-            ('i', '\u{0129}'), ('u', '\u{016B}'),
+            ('a', '\u{00E3}'),
+            ('n', '\u{00F1}'),
+            ('o', '\u{00F5}'),
+            ('i', '\u{0129}'),
+            ('u', '\u{016B}'),
         ];
         const DIAERESIS: &[(char, char)] = &[
-            ('a', '\u{00E4}'), ('e', '\u{00EB}'), ('i', '\u{00EF}'), ('o', '\u{00F6}'),
-            ('u', '\u{00FC}'), ('y', '\u{00FF}'),
+            ('a', '\u{00E4}'),
+            ('e', '\u{00EB}'),
+            ('i', '\u{00EF}'),
+            ('o', '\u{00F6}'),
+            ('u', '\u{00FC}'),
+            ('y', '\u{00FF}'),
         ];
         const CEDILLA: &[(char, char)] = &[
-            ('c', '\u{00E7}'), ('s', '\u{015F}'), ('t', '\u{0163}'), ('g', '\u{0127}'),
+            ('c', '\u{00E7}'),
+            ('s', '\u{015F}'),
+            ('t', '\u{0163}'),
+            ('g', '\u{0127}'),
         ];
-        const DOUBLE_ACUTE: &[(char, char)] = &[
-            ('o', '\u{0151}'), ('u', '\u{0171}'),
-        ];
+        const DOUBLE_ACUTE: &[(char, char)] = &[('o', '\u{0151}'), ('u', '\u{0171}')];
         const MACRON: &[(char, char)] = &[
-            ('a', '\u{0101}'), ('e', '\u{0113}'), ('i', '\u{012B}'), ('o', '\u{014D}'),
-            ('u', '\u{016B}'), ('n', '\u{00F1}'),
+            ('a', '\u{0101}'),
+            ('e', '\u{0113}'),
+            ('i', '\u{012B}'),
+            ('o', '\u{014D}'),
+            ('u', '\u{016B}'),
+            ('n', '\u{00F1}'),
         ];
         const DOT_ABOVE: &[(char, char)] = &[
-            ('c', '\u{010B}'), ('e', '\u{0117}'), ('g', '\u{0121}'), ('z', '\u{017C}'),
+            ('c', '\u{010B}'),
+            ('e', '\u{0117}'),
+            ('g', '\u{0121}'),
+            ('z', '\u{017C}'),
         ];
 
         let table: &[(char, char)] = match self {
@@ -207,14 +237,21 @@ mod tests {
     #[test]
     fn the_composing_fallback_is_a_single_grapheme() {
         for key in [
-            DeadKey::Acute, DeadKey::Grave, DeadKey::Circumflex, DeadKey::Tilde,
-            DeadKey::Diaeresis, DeadKey::Cedilla, DeadKey::DoubleAcute,
-            DeadKey::Macron, DeadKey::DotAbove,
+            DeadKey::Acute,
+            DeadKey::Grave,
+            DeadKey::Circumflex,
+            DeadKey::Tilde,
+            DeadKey::Diaeresis,
+            DeadKey::Cedilla,
+            DeadKey::DoubleAcute,
+            DeadKey::Macron,
+            DeadKey::DotAbove,
         ] {
             for base in ['x', 'q', 'v'] {
                 let composed = key.compose(base);
                 assert_eq!(
-                    grapheme::count(&composed), 1,
+                    grapheme::count(&composed),
+                    1,
                     "{key:?} + {base} = {composed:?} is not one cluster"
                 );
             }
@@ -232,9 +269,15 @@ mod tests {
     #[test]
     fn the_mark_is_a_nonspacing_combining_character() {
         for key in [
-            DeadKey::Acute, DeadKey::Grave, DeadKey::Circumflex, DeadKey::Tilde,
-            DeadKey::Diaeresis, DeadKey::Cedilla, DeadKey::DoubleAcute,
-            DeadKey::Macron, DeadKey::DotAbove,
+            DeadKey::Acute,
+            DeadKey::Grave,
+            DeadKey::Circumflex,
+            DeadKey::Tilde,
+            DeadKey::Diaeresis,
+            DeadKey::Cedilla,
+            DeadKey::DoubleAcute,
+            DeadKey::Macron,
+            DeadKey::DotAbove,
         ] {
             let m = key.combining();
             let c = m as u32;
@@ -249,9 +292,15 @@ mod tests {
     fn every_dead_key_composes_with_every_letter() {
         // No panics, no empty output, whatever the letter.
         for key in [
-            DeadKey::Acute, DeadKey::Grave, DeadKey::Circumflex, DeadKey::Tilde,
-            DeadKey::Diaeresis, DeadKey::Cedilla, DeadKey::DoubleAcute,
-            DeadKey::Macron, DeadKey::DotAbove,
+            DeadKey::Acute,
+            DeadKey::Grave,
+            DeadKey::Circumflex,
+            DeadKey::Tilde,
+            DeadKey::Diaeresis,
+            DeadKey::Cedilla,
+            DeadKey::DoubleAcute,
+            DeadKey::Macron,
+            DeadKey::DotAbove,
         ] {
             for base in ('a'..='z').chain('A'..='Z') {
                 let s = key.compose(base);

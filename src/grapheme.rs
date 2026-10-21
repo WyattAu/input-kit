@@ -270,10 +270,7 @@ mod tests {
         // Deleting "caf" leaves the decomposed e with its mark intact. A
         // byte-range delete of 0..3 would be a different span; the point is
         // that a *cluster* range never orphans the U+0301.
-        assert_eq!(
-            delete("cafe\u{0301}", 0..3).as_deref(),
-            Some("e\u{0301}")
-        );
+        assert_eq!(delete("cafe\u{0301}", 0..3).as_deref(), Some("e\u{0301}"));
         // A precomposed letter is one cluster in one byte-pair.
         assert_eq!(delete("caf\u{00E9}", 3..4).as_deref(), Some("caf"));
     }
